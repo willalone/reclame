@@ -85,16 +85,10 @@ const Quiz = ({ onComplete }) => {
       timestamp: new Date().toISOString()
     }
 
-    // Отправка в Telegram бот
+    // Отправка данных
     try {
-      const response = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/sendMessage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: '919481169',
-          text: `🏠 Новая заявка с квиза "Самолет МКР"
+      // Создаем текст сообщения
+      const messageText = `🏠 Новая заявка с квиза "Самолет МКР"
 
 👤 Имя: ${results.name}
 📞 Телефон: ${results.phone}
@@ -107,20 +101,48 @@ ${Object.entries(results.answers).map(([key, value]) => {
 }).join('\n')}
 
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}`
-        })
-      })
 
-      if (response.ok) {
-        alert('✅ Спасибо! Мы свяжемся с вами в ближайшее время.')
-        onComplete()
-      } else {
-        const errorData = await response.json()
-        console.error('Ошибка Telegram:', errorData)
-        alert('❌ Ошибка отправки. Попробуйте позже.')
+      // Сохраняем данные в localStorage
+      const savedApplications = JSON.parse(localStorage.getItem('quizApplications') || '[]')
+      savedApplications.push({
+        ...results,
+        messageText,
+        timestamp: new Date().toISOString()
+      })
+      localStorage.setItem('quizApplications', JSON.stringify(savedApplications))
+
+      // Показываем модальное окно с данными для копирования
+      const modal = document.createElement('div')
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.8); z-index: 10000; display: flex; 
+        align-items: center; justify-content: center;
+      `
+      modal.innerHTML = `
+        <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+          <h2 style="margin: 0 0 20px 0; color: #333;">📋 Данные заявки</h2>
+          <p style="margin: 0 0 15px 0; color: #666;">Скопируйте данные и отправьте в Telegram бот:</p>
+          <textarea readonly style="width: 100%; height: 300px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-family: monospace; font-size: 14px; resize: vertical;">${messageText}</textarea>
+          <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.value); alert('✅ Скопировано!')" style="background: #007bff; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px;">📋 Скопировать</button>
+            <button onclick="window.open('https://t.me/your_bot_username', '_blank')" style="background: #0088cc; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px;">📱 Открыть Telegram</button>
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px;">❌ Закрыть</button>
+          </div>
+          <p style="margin: 15px 0 0 0; font-size: 14px; color: #666;">💡 Данные также сохранены в браузере</p>
+        </div>
+      `
+      document.body.appendChild(modal)
+
+      // Автоматически копируем в буфер обмена
+      try {
+        await navigator.clipboard.writeText(messageText)
+      } catch (e) {
+        console.log('Не удалось скопировать автоматически')
       }
+
     } catch (error) {
-      console.error('Ошибка отправки:', error)
-      alert('❌ Произошла ошибка. Проверьте подключение к интернету.')
+      console.error('Ошибка:', error)
+      alert('❌ Произошла ошибка. Попробуйте позже.')
     }
   }
 
