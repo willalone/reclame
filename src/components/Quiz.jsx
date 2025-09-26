@@ -13,30 +13,30 @@ const Quiz = ({ onComplete }) => {
       id: 1,
       question: "Какое количество комнат вы рассматриваете?",
       options: [
-        { value: "studio", label: "Студия", image: "/plan-studio.jpg" },
-        { value: "1room", label: "1-комнатная", image: "/plan-1room.jpg" },
-        { value: "2room", label: "2-комнатная", image: "/plan-2room.jpg" },
-        { value: "3room", label: "3-комнатная", image: "/plan-3room.jpg" }
+        { value: "studio", label: "Студия", image: "/question1.png" },
+        { value: "1room", label: "1-комнатная", image: "/question1.png" },
+        { value: "2room", label: "2-комнатная", image: "/question1.png" },
+        { value: "3room", label: "3-комнатная", image: "/question1.png" }
       ]
     },
     {
       id: 2,
       question: "Какой вариант отделки вы рассматриваете?",
       options: [
-        { value: "prefinish", label: "Предчистовая", image: "/finish-prefinish.jpg" },
-        { value: "renovated", label: "С ремонтом", image: "/finish-renovated.jpg" },
-        { value: "different", label: "Рассматриваю разные варианты", image: "/finish-different.jpg" }
+        { value: "prefinish", label: "Предчистовая", image: "/question2.png" },
+        { value: "renovated", label: "С ремонтом", image: "/question2.png" },
+        { value: "different", label: "Рассматриваю разные варианты", image: "/question2.png" }
       ]
     },
     {
       id: 3,
       question: "Какой способ покупки квартиры вы рассматриваете?",
       options: [
-        { value: "mortgage", label: "Ипотека", image: "/payment-mortgage.jpg" },
-        { value: "state_mortgage", label: "Ипотека с гос. поддержкой", image: "/payment-state.jpg" },
-        { value: "installment", label: "Рассрочка", image: "/payment-installment.jpg" },
-        { value: "cash", label: "Наличный расчет", image: "/payment-cash.jpg" },
-        { value: "different", label: "Рассматриваю разные способы оплаты", image: "/payment-different.jpg" }
+        { value: "mortgage", label: "Ипотека", image: "/question3.png" },
+        { value: "state_mortgage", label: "Ипотека с гос. поддержкой", image: "/question3.png" },
+        { value: "installment", label: "Рассрочка", image: "/question3.png" },
+        { value: "cash", label: "Наличный расчет", image: "/question3.png" },
+        { value: "different", label: "Рассматриваю разные способы оплаты", image: "/question3.png" }
       ]
     }
   ]
@@ -87,13 +87,13 @@ const Quiz = ({ onComplete }) => {
 
     // Отправка в Telegram бот
     try {
-      const response = await fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage', {
+      const response = await fetch('https://api.telegram.org/bot<8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM>/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: '<YOUR_CHAT_ID>',
+          chat_id: '<919481169>',
           text: `Новая заявка с квиза:\n\nИмя: ${results.name}\nТелефон: ${results.phone}\n\nОтветы:\n${JSON.stringify(results.answers, null, 2)}`
         })
       })
@@ -132,7 +132,7 @@ const Quiz = ({ onComplete }) => {
           </div>
         </div>
         
-        <div className="quiz-content">
+        <div className="quiz-content final-page">
           <div className="quiz-left">
             <h2 className="quiz-question">Получите персональную подборку квартир, заполнив форму</h2>
             
@@ -164,10 +164,6 @@ const Quiz = ({ onComplete }) => {
               <div className="form-group">
                 <label>ВВЕДИТЕ ТЕЛЕФОН</label>
                 <div className="phone-input">
-                  <div className="phone-prefix">
-                    <span>🇷🇺</span>
-                    <span>+7</span>
-                  </div>
                   <input
                     type="tel"
                     value={formData.phone}
@@ -191,12 +187,13 @@ const Quiz = ({ onComplete }) => {
           </div>
           
           <div className="quiz-right">
-            <img src="/complex-image.jpg" alt="Жилой комплекс" />
+            <div className="question-image">
+              <img src="/background-last.png" alt="Жилой комплекс" />
+            </div>
           </div>
         </div>
         
         <div className="quiz-footer">
-          <div className="quiz-brand">Создай свой <span>марквиз</span></div>
         </div>
       </div>
     )
@@ -231,44 +228,37 @@ const Quiz = ({ onComplete }) => {
         </div>
         
         <div className="quiz-right">
-          <div className="plans-grid">
-            {questions[currentQuestion].options.map((option, index) => (
-              <div key={index} className="plan-item">
-                <img src={option.image} alt={option.label} />
-                <div className="plan-label">{option.label}</div>
-              </div>
-            ))}
+          <div className="question-image">
+            <img src={questions[currentQuestion].options[0].image} alt="Вопрос" />
           </div>
         </div>
       </div>
       
-      <div className="quiz-footer">
-        <div className="progress-info">
-          <span>Готово: {progress}%</span>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+        <div className="quiz-footer">
+          <div className="progress-info">
+            <span>Готово: {progress}%</span>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+            </div>
+          </div>
+          
+          <div className="quiz-navigation">
+            <button 
+              className="nav-button prev" 
+              onClick={handlePrev}
+              disabled={currentQuestion === 0}
+            >
+              ←
+            </button>
+            <button 
+              className="nav-button next" 
+              onClick={handleNext}
+              disabled={currentQuestion === questions.length - 1}
+            >
+              {currentQuestion === questions.length - 1 ? 'Последний шаг' : 'Далее →'}
+            </button>
           </div>
         </div>
-        
-        <div className="quiz-brand">Создай свой <span>марквиз</span></div>
-        
-        <div className="quiz-navigation">
-          <button 
-            className="nav-button prev" 
-            onClick={handlePrev}
-            disabled={currentQuestion === 0}
-          >
-            ←
-          </button>
-          <button 
-            className="nav-button next" 
-            onClick={handleNext}
-            disabled={currentQuestion === questions.length - 1}
-          >
-            {currentQuestion === questions.length - 1 ? 'Последний шаг' : 'Далее →'}
-          </button>
-        </div>
-      </div>
     </div>
   )
 }
