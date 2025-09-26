@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Sender</title>
+</head>
+<body>
+    <script>
+        // Получаем данные из URL параметров
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        const phone = urlParams.get('phone');
+        const answers = urlParams.get('answers');
+        
+        if (name && phone && answers) {
+            try {
+                const parsedAnswers = JSON.parse(decodeURIComponent(answers));
+                
+                const message = `🏠 Новая заявка с квиза "Самолет МКР"
+
+👤 Имя: ${name}
+📞 Телефон: ${phone}
+
+📝 Ответы на вопросы:
+${parsedAnswers.map(item => `• ${item.question}: ${item.answer}`).join('\n')}
+
+⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
+
+                // Отправляем в Telegram через GET запрос
+                const BOT_TOKEN = '8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM';
+                const CHAT_ID = '919481169';
+                const encodedMessage = encodeURIComponent(message);
+                const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodedMessage}&parse_mode=HTML`;
+                
+                fetch(telegramUrl, {
+                    method: 'GET',
+                    mode: 'no-cors'
+                }).then(() => {
+                    // Уведомляем родительское окно об успехе
+                    if (window.parent) {
+                        window.parent.postMessage({ success: true, message: 'Данные отправлены в Telegram' }, '*');
+                    }
+                }).catch(error => {
+                    console.error('Ошибка отправки:', error);
+                    if (window.parent) {
+                        window.parent.postMessage({ success: false, error: error.message }, '*');
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Ошибка обработки данных:', error);
+                if (window.parent) {
+                    window.parent.postMessage({ success: false, error: error.message }, '*');
+                }
+            }
+        } else {
+            console.log('Недостаточно данных для отправки');
+            if (window.parent) {
+                window.parent.postMessage({ success: false, error: 'Недостаточно данных' }, '*');
+            }
+        }
+    </script>
+</body>
+</html>

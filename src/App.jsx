@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Quiz from './components/Quiz'
-import './App.css'
 
 function App() {
   const [currentStep, setCurrentStep] = useState('start')
@@ -11,7 +10,7 @@ function App() {
         <div className="start-screen">
           <div className="start-content">
             <div className="start-left">
-              <img src="./background-first.webp" alt="Жилой комплекс Самолет МКР" className="start-image" />
+              <img src="/background-first.webp" alt="Жилой комплекс Самолет МКР" className="start-image" />
             </div>
             <div className="start-right">
               <div className="start-header">
