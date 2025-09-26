@@ -87,6 +87,18 @@ const Quiz = ({ onComplete }) => {
 
     // Отправка в Telegram бот
     try {
+      console.log('Отправка данных:', results)
+      
+      // Сначала проверим, что бот активен
+      const botInfoResponse = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/getMe')
+      const botInfo = await botInfoResponse.json()
+      console.log('Информация о боте:', botInfo)
+      
+      if (!botInfo.ok) {
+        alert(`Ошибка бота: ${botInfo.description}`)
+        return
+      }
+      
       const response = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/sendMessage', {
         method: 'POST',
         headers: {
@@ -98,13 +110,18 @@ const Quiz = ({ onComplete }) => {
         })
       })
 
+      console.log('Статус ответа:', response.status)
+      console.log('Ответ сервера:', await response.text())
+
       if (response.ok) {
         alert('Спасибо! Мы свяжемся с вами в ближайшее время.')
         onComplete()
+      } else {
+        alert(`Ошибка сервера: ${response.status}`)
       }
     } catch (error) {
       console.error('Ошибка отправки:', error)
-      alert('Произошла ошибка. Попробуйте позже.')
+      alert(`Произошла ошибка: ${error.message}`)
     }
   }
 
