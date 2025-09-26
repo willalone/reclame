@@ -87,18 +87,6 @@ const Quiz = ({ onComplete }) => {
 
     // Отправка в Telegram бот
     try {
-      console.log('Отправка данных:', results)
-      
-      // Сначала проверим, что бот активен
-      const botInfoResponse = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/getMe')
-      const botInfo = await botInfoResponse.json()
-      console.log('Информация о боте:', botInfo)
-      
-      if (!botInfo.ok) {
-        alert(`Ошибка бота: ${botInfo.description}`)
-        return
-      }
-      
       const response = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/sendMessage', {
         method: 'POST',
         headers: {
@@ -106,22 +94,33 @@ const Quiz = ({ onComplete }) => {
         },
         body: JSON.stringify({
           chat_id: '919481169',
-          text: `Новая заявка с квиза:\n\nИмя: ${results.name}\nТелефон: ${results.phone}\n\nОтветы:\n${JSON.stringify(results.answers, null, 2)}`
+          text: `🏠 Новая заявка с квиза "Самолет МКР"
+
+👤 Имя: ${results.name}
+📞 Телефон: ${results.phone}
+
+📝 Ответы на вопросы:
+${Object.entries(results.answers).map(([key, value]) => {
+  const question = questions.find(q => q.id === parseInt(key))
+  const option = question?.options.find(opt => opt.value === value)
+  return `• ${question?.question}: ${option?.label || value}`
+}).join('\n')}
+
+⏰ Время: ${new Date().toLocaleString('ru-RU')}`
         })
       })
 
-      console.log('Статус ответа:', response.status)
-      console.log('Ответ сервера:', await response.text())
-
       if (response.ok) {
-        alert('Спасибо! Мы свяжемся с вами в ближайшее время.')
+        alert('✅ Спасибо! Мы свяжемся с вами в ближайшее время.')
         onComplete()
       } else {
-        alert(`Ошибка сервера: ${response.status}`)
+        const errorData = await response.json()
+        console.error('Ошибка Telegram:', errorData)
+        alert('❌ Ошибка отправки. Попробуйте позже.')
       }
     } catch (error) {
       console.error('Ошибка отправки:', error)
-      alert(`Произошла ошибка: ${error.message}`)
+      alert('❌ Произошла ошибка. Проверьте подключение к интернету.')
     }
   }
 
