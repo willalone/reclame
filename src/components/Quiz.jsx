@@ -135,14 +135,19 @@ ${Object.entries(results.answers).map(([key, value]) => {
 
       // Автоматически копируем в буфер обмена
       try {
-        await navigator.clipboard.writeText(messageText)
+        navigator.clipboard.writeText(messageText).then(() => {
+          console.log('Данные скопированы в буфер обмена')
+        }).catch(e => {
+          console.log('Не удалось скопировать автоматически:', e)
+        })
       } catch (e) {
-        console.log('Не удалось скопировать автоматически')
+        console.log('Не удалось скопировать автоматически:', e)
       }
 
     } catch (error) {
-      console.error('Ошибка:', error)
-      alert('❌ Произошла ошибка. Попробуйте позже.')
+      console.error('Детальная ошибка:', error)
+      console.error('Стек ошибки:', error.stack)
+      alert(`❌ Произошла ошибка: ${error.message}\n\nПроверьте консоль браузера (F12) для подробностей.`)
     }
   }
 
