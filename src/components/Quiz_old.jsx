@@ -75,7 +75,7 @@ const Quiz = ({ onComplete }) => {
     }
   }
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
     
     console.log('🚀 Начинаем обработку формы...')
@@ -89,7 +89,9 @@ const Quiz = ({ onComplete }) => {
 
     console.log('📊 Данные для отправки:', results)
 
+    // Отправка данных
     try {
+      // Создаем текст сообщения
       const messageText = `🏠 Новая заявка с квиза "Самолет МКР"
 
 👤 Имя: ${results.name}
@@ -104,6 +106,7 @@ ${Object.entries(results.answers).map(([key, value]) => {
 
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}`
 
+      // Сохраняем данные в localStorage
       const savedApplications = JSON.parse(localStorage.getItem('quizApplications') || '[]')
       savedApplications.push({
         ...results,
@@ -114,6 +117,7 @@ ${Object.entries(results.answers).map(([key, value]) => {
 
       console.log('📝 Создаем модальное окно...')
       
+      // Показываем модальное окно с данными для копирования
       const modal = document.createElement('div')
       modal.style.cssText = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -136,6 +140,7 @@ ${Object.entries(results.answers).map(([key, value]) => {
       document.body.appendChild(modal)
       console.log('✅ Модальное окно добавлено в DOM')
 
+      // Автоматически копируем в буфер обмена
       try {
         navigator.clipboard.writeText(messageText).then(() => {
           console.log('Данные скопированы в буфер обмена')
@@ -163,36 +168,20 @@ ${Object.entries(results.answers).map(([key, value]) => {
     return `+7(${numbers.slice(1, 4)})${numbers.slice(4, 7)}-${numbers.slice(7, 9)}-${numbers.slice(9, 11)}`
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    if (name === 'phone') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: formatPhone(value)
-      }))
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }))
-    }
+  const handlePhoneChange = (e) => {
+    const formatted = formatPhone(e.target.value)
+    setFormData(prev => ({ ...prev, phone: formatted }))
   }
 
-  return (
-    <div className="quiz-container">
-      <div className="quiz-banner">
-        <div className="quiz-banner-content">
-          <div className="quiz-banner-left">
-            <div className="quiz-banner-title">Подберите квартиру</div>
-            <div className="quiz-banner-subtitle">Ответьте на несколько вопросов и получите персональную подборку</div>
-          </div>
-          <div className="quiz-banner-right">
-            <div className="quiz-banner-phone">+7(861)206-03-90</div>
+  if (showForm) {
+    return (
+      <div className="quiz-container">
+        <div className="quiz-header">
+          <div className="quiz-banner">
+            Поможем выбрать квартиру и дом, чтобы они подходили именно под ваш образ жизни
           </div>
         </div>
-      </div>
-      
-      {showForm ? (
+        
         <div className="quiz-content final-page">
           <div className="quiz-left">
             <h2 className="quiz-question">Получите персональную подборку квартир, заполнив форму</h2>
@@ -211,104 +200,115 @@ ${Object.entries(results.answers).map(([key, value]) => {
             </div>
             
             <form onSubmit={handleFormSubmit} className="quiz-form">
-              <div className="quiz-form-group">
-                <label htmlFor="name">ВВЕДИТЕ ИМЯ</label>
+              <div className="form-group">
+                <label>ВВЕДИТЕ ИМЯ</label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
                   value={formData.name}
-                  onChange={handleInputChange}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Имя"
                   required
                 />
               </div>
               
-              <div className="quiz-form-group">
-                <label htmlFor="phone">ВВЕДИТЕ ТЕЛЕФОН</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="+7(___)___-__-__"
-                  required
-                />
+              <div className="form-group">
+                <label>ВВЕДИТЕ ТЕЛЕФОН</label>
+                <div className="phone-input">
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    placeholder="Введите телефон *"
+                    maxLength="18"
+                    required
+                  />
+                </div>
               </div>
               
-              <button type="submit" className="quiz-submit-button">
+              <button type="submit" className="submit-button">
                 Получить результаты
               </button>
               
-              <div className="quiz-form-footer">
-                <label className="quiz-checkbox">
-                  <input type="checkbox" required />
-                  <span className="quiz-checkbox-mark"></span>
-                  Я соглашаюсь на обработку персональных данных согласно политике конфиденциальности
-                </label>
-              </div>
-              
-              <div className="quiz-right">
-                <div className="question-image">
-                  <img src="./background-last.png" alt="Жилой комплекс" />
-                </div>
+              <div className="form-checkbox">
+                <input type="checkbox" required />
+                <span>Я соглашаюсь на обработку персональных данных согласно политике конфиденциальности</span>
               </div>
             </form>
-          </div>
-          <div className="quiz-footer">
-          </div>
-        </div>
-      ) : (
-        <div className={`quiz-content ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
-          <div className="quiz-left">
-            <h2 className="quiz-question">{questions[currentQuestion].question}</h2>
-            
-            <div className="quiz-options">
-              {questions[currentQuestion].options.map((option, index) => (
-                <button
-                  key={index}
-                  className={`quiz-option ${selectedAnswers[currentQuestion] === option.value ? 'selected' : ''}`}
-                  onClick={() => handleAnswerSelect(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
           </div>
           
           <div className="quiz-right">
             <div className="question-image">
-              <img src={questions[currentQuestion].options[0].image} alt="Вопрос" />
+              <img src="./background-last.png" alt="Жилой комплекс" />
             </div>
           </div>
         </div>
-      )}
-      
-      <div className="quiz-footer">
-        <div className="quiz-progress">
-          <div className="quiz-progress-bar">
-            <div className="quiz-progress-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-          <div className="quiz-progress-text">{progress}%</div>
-        </div>
         
-        <div className="quiz-navigation">
-          <button 
-            className="quiz-nav-button" 
-            onClick={handlePrev}
-            disabled={currentQuestion === 0}
-          >
-            ←
-          </button>
-          <button 
-            className="quiz-nav-button" 
-            onClick={handleNext}
-            disabled={currentQuestion === questions.length - 1}
-          >
-            →
-          </button>
+        <div className="quiz-footer">
         </div>
       </div>
+    )
+  }
+
+  return (
+    <div className="quiz-container">
+      <div className="quiz-header">
+        <div className="quiz-banner">
+          Поможем выбрать квартиру и дом, чтобы они подходили именно под ваш образ жизни
+        </div>
+      </div>
+      
+      <div className="quiz-content">
+        <div className="quiz-left">
+          <h2 className="quiz-question">{questions[currentQuestion].question}</h2>
+          
+          <div className="quiz-options">
+            {questions[currentQuestion].options.map((option, index) => (
+              <div
+                key={index}
+                className={`quiz-option ${selectedAnswers[currentQuestion] === option.value ? 'selected' : ''}`}
+                onClick={() => handleAnswerSelect(option.value)}
+              >
+                <div className="option-radio">
+                  <div className="radio-circle"></div>
+                </div>
+                <span>{option.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="quiz-right">
+          <div className="question-image">
+            <img src={questions[currentQuestion].options[0].image} alt="Вопрос" />
+          </div>
+        </div>
+      </div>
+      
+        <div className="quiz-footer">
+          <div className="progress-info">
+            <span>Готово: {progress}%</span>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+            </div>
+          </div>
+          
+          <div className="quiz-navigation">
+            <button 
+              className="nav-button prev" 
+              onClick={handlePrev}
+              disabled={currentQuestion === 0}
+            >
+              ←
+            </button>
+            <button 
+              className="nav-button next" 
+              onClick={handleNext}
+              disabled={currentQuestion === questions.length - 1}
+            >
+              {currentQuestion === questions.length - 1 ? 'Последний шаг' : 'Далее →'}
+            </button>
+          </div>
+        </div>
     </div>
   )
 }
