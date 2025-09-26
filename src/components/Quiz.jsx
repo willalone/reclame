@@ -78,12 +78,16 @@ const Quiz = ({ onComplete }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault()
     
+    console.log('🚀 Начинаем обработку формы...')
+    
     const results = {
       answers: selectedAnswers,
       name: formData.name,
       phone: formData.phone,
       timestamp: new Date().toISOString()
     }
+
+    console.log('📊 Данные для отправки:', results)
 
     // Отправка данных
     try {
@@ -111,6 +115,8 @@ ${Object.entries(results.answers).map(([key, value]) => {
       })
       localStorage.setItem('quizApplications', JSON.stringify(savedApplications))
 
+      console.log('📝 Создаем модальное окно...')
+      
       // Показываем модальное окно с данными для копирования
       const modal = document.createElement('div')
       modal.style.cssText = `
@@ -132,6 +138,7 @@ ${Object.entries(results.answers).map(([key, value]) => {
         </div>
       `
       document.body.appendChild(modal)
+      console.log('✅ Модальное окно добавлено в DOM')
 
       // Автоматически копируем в буфер обмена
       try {
