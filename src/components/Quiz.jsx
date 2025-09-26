@@ -13,30 +13,30 @@ const Quiz = ({ onComplete }) => {
       id: 1,
       question: "Какое количество комнат вы рассматриваете?",
       options: [
-        { value: "studio", label: "Студия", image: "/question1.png" },
-        { value: "1room", label: "1-комнатная", image: "/question1.png" },
-        { value: "2room", label: "2-комнатная", image: "/question1.png" },
-        { value: "3room", label: "3-комнатная", image: "/question1.png" }
+        { value: "studio", label: "Студия", image: "./question1.png" },
+        { value: "1room", label: "1-комнатная", image: "./question1.png" },
+        { value: "2room", label: "2-комнатная", image: "./question1.png" },
+        { value: "3room", label: "3-комнатная", image: "./question1.png" }
       ]
     },
     {
       id: 2,
       question: "Какой вариант отделки вы рассматриваете?",
       options: [
-        { value: "prefinish", label: "Предчистовая", image: "/question2.png" },
-        { value: "renovated", label: "С ремонтом", image: "/question2.png" },
-        { value: "different", label: "Рассматриваю разные варианты", image: "/question2.png" }
+        { value: "prefinish", label: "Предчистовая", image: "./question2.png" },
+        { value: "renovated", label: "С ремонтом", image: "./question2.png" },
+        { value: "different", label: "Рассматриваю разные варианты", image: "./question2.png" }
       ]
     },
     {
       id: 3,
       question: "Какой способ покупки квартиры вы рассматриваете?",
       options: [
-        { value: "mortgage", label: "Ипотека", image: "/question3.png" },
-        { value: "state_mortgage", label: "Ипотека с гос. поддержкой", image: "/question3.png" },
-        { value: "installment", label: "Рассрочка", image: "/question3.png" },
-        { value: "cash", label: "Наличный расчет", image: "/question3.png" },
-        { value: "different", label: "Рассматриваю разные способы оплаты", image: "/question3.png" }
+        { value: "mortgage", label: "Ипотека", image: "./question3.png" },
+        { value: "state_mortgage", label: "Ипотека с гос. поддержкой", image: "./question3.png" },
+        { value: "installment", label: "Рассрочка", image: "./question3.png" },
+        { value: "cash", label: "Наличный расчет", image: "./question3.png" },
+        { value: "different", label: "Рассматриваю разные способы оплаты", image: "./question3.png" }
       ]
     }
   ]
@@ -188,7 +188,7 @@ const Quiz = ({ onComplete }) => {
           
           <div className="quiz-right">
             <div className="question-image">
-              <img src="/background-last.png" alt="Жилой комплекс" />
+              <img src="./background-last.png" alt="Жилой комплекс" />
             </div>
           </div>
         </div>
