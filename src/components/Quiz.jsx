@@ -87,13 +87,13 @@ const Quiz = ({ onComplete }) => {
 
     // Отправка в Telegram бот
     try {
-      const response = await fetch('https://api.telegram.org/bot<8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM>/sendMessage', {
+      const response = await fetch('https://api.telegram.org/bot8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: '<919481169>',
+          chat_id: '919481169',
           text: `Новая заявка с квиза:\n\nИмя: ${results.name}\nТелефон: ${results.phone}\n\nОтветы:\n${JSON.stringify(results.answers, null, 2)}`
         })
       })
