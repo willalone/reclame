@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "vite",
-    "deploy": "npm run build && cp -r dist/* deploy/ && gh-pages -d deploy --dotfiles"
+    "deploy": "npm run build && npx gh-pages -d dist --dotfiles"
   },
   "dependencies": {
     "react": "^18.2.0",
