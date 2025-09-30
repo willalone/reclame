@@ -64,14 +64,14 @@ const Quiz = ({ onComplete }) => {
       [currentQuestion]: answer
     }))
     
-    // Устанавливаем новый таймаут для автоматического перехода через 2 секунды
+    // Устанавливаем новый таймаут для автоматического перехода через 1.5 секунды
     const timeout = setTimeout(() => {
       if (currentQuestion < questions.length - 1) {
         setCurrentQuestion(prev => prev + 1)
       } else {
         setShowForm(true)
       }
-    }, 2000)
+    }, 1500)
     
     setAutoTransitionTimeout(timeout)
   }
@@ -385,9 +385,6 @@ ${formattedAnswers.map(item => `• ${item.question}: ${item.answer}`).join('\n'
             <div className="question-image">
               <img src="./background-last.png" alt="Жилой комплекс" />
             </div>
-          </div>
-          
-          <div className="quiz-footer">
           </div>
         </div>
       ) : (
