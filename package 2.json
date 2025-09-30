@@ -1,0 +1,27 @@
+{
+  "name": "samolet-mkr-mirror",
+  "version": "1.0.0",
+  "description": "Зеркальный сайт для Самолет МКР",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite",
+    "deploy": "npm run build && cp -r dist/* deploy/ && gh-pages -d deploy --dotfiles"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.4.0",
+    "gh-pages": "^6.0.0"
+  },
+  "keywords": ["react", "vite", "static", "website"],
+  "author": "",
+  "license": "MIT"
+}
