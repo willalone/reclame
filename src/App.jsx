@@ -37,7 +37,7 @@ function App() {
               </button>
               
               <div className="start-footer">
-                <div className="start-phone">+7(861)206-03-90</div>
+                <div className="start-phone">+7(988)470-78-93</div>
                 <div className="start-brand">DOGMA</div>
               </div>
             </div>

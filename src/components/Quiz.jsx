@@ -319,7 +319,7 @@ ${formattedAnswers.map(item => `• ${item.question}: ${item.answer}`).join('\n'
             <div className="quiz-banner-subtitle">Ответьте на несколько вопросов и получите персональную подборку</div>
           </div>
           <div className="quiz-banner-right">
-            <div className="quiz-banner-phone">+7(861)206-03-90</div>
+            <div className="quiz-banner-phone">+7(988)470-78-93</div>
           </div>
         </div>
       </div>
