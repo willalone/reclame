@@ -1,6 +1,6 @@
 // Telegram bot configuration
 export const BOT_TOKEN = '8026350498:AAGcyKMsrJyD0mGgj26Ss2m49vX5jp8LzaM'
-export const CHAT_ID = '919481169'
+export const CHAT_ID = '5918352278'
 
 // Telegram API URL (с прокси для разработки)
 const isDev = import.meta.env.DEV
